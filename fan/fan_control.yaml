@@ -1,0 +1,18 @@
+action: remote.send_command
+data:
+  num_repeats: 1
+  delay_secs: 0.4
+  hold_secs: 0
+  device: "{{ fan_name }}"
+  command: >
+    {% if percentage == 0 %}
+      off
+    {% elif percentage > 0 and percentage <= 33 %}
+      speed1
+    {% elif percentage > 33 and percentage <= 66 %}
+      speed2
+    {% elif percentage > 66 %}
+      speed3
+    {% endif %}
+target:
+  device_id: a1ec61298d8a76bb71d05164126da38a

@@ -1,0 +1,26 @@
+fan:
+  - platform: template
+    fans:
+      helper_fan:
+        friendly_name: "Helper Fan"
+        value_template: "{{ states('input_boolean.state') }}"
+        turn_on:
+          - action: input_boolean.turn_on
+            target:
+              entity_id: input_boolean.state
+        turn_off:
+          - action: input_boolean.turn_off
+            target:
+              entity_id: input_boolean.state
+        percentage_template: >
+          {{ states('input_number.percentage') if is_state('input_boolean.state', 'on') else 0 }}
+        speed_count: 6
+        set_percentage:
+          - action: input_boolean.turn_{{ 'on' if percentage > 0 else 'off' }}
+            target:
+              entity_id: input_boolean.state
+          - action: input_number.set_value
+            target:
+              entity_id: input_number.percentage
+            data:
+              value: "{{ percentage }}"
